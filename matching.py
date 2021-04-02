@@ -46,11 +46,12 @@ def match(students, employers):
         db_final = match_socials(db_cleaned_up, curr)
 
         # pretty print top candidates for current employer
-        pretty_print(s_final, curr)
+        output = pretty_print(s_final, curr)
         # pretty_print(db_final)
     return
 
 if __name__ == "__main__":
     student_file = input("Enter hte name of the student csv file (with path): ")
     employer_file = input("Enter the name of the employer csv file (with path): ")
+    
     match(student_file, employer_file)

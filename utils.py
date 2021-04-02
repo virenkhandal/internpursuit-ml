@@ -13,7 +13,7 @@ def optimize_skills(appended):
     df['Communication'] = df['Rank each skill on the list first to last. [Communication]'].astype(str).str[0]
     df['Critical Thinking'] = df['Rank each skill on the list first to last. [Critical Thinking ]'].astype(str).str[0]
 
-    newdf = df[['Problem Solving', 'Creativity', 'Research', 'Time Management', 'Communication']]
+    newdf = df[['Problem Solving', 'Creativity', 'Research', 'Time Management', 'Communication', 'Critical Thinking']]
     newdf['Problem Solving'].replace("n", value="0", inplace=True)
     newdf['Creativity'].replace("n", value="0", inplace=True) 
     newdf['Research'].replace("n", value="0", inplace=True) 
@@ -79,8 +79,9 @@ def pretty_print(dataframe, curr):
     names = dataframe['Name'].values.tolist()
     scores = dataframe['Final Score'].values.tolist()
 
-    top_students = sorted(zip(scores, names), reverse=True)[:3]
+    top_students = sorted(zip(scores, names), reverse=True)[:10]
     print(colored(("The top 3 students for " + curr['Name'].values[0] + " after filtering, skills matching, and social cause matching are:"), "blue"))
     for i in range(3):
         print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
     print()
+    return top_students
