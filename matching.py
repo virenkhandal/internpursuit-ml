@@ -12,7 +12,7 @@ def match(students, employers):
     students = pd.read_csv(students)
     employers = pd.read_csv(employers)
 
-    employers = employers.rename(columns={'Company Name': 'Name', 'Majors and Minors (check all that apply)':'Majors/Minors', 'Identify only 3':'Social Causes'})
+    employers = employers.rename(columns={'Company Name': 'Name', 'Majors and Minors (check all that apply)':'Majors/Minors', 'Identify only 3':'Social Causes', 'Citizenship (check all that apply)':'Citizenship'})
     students = students.rename(columns={'Best email to reach you':'Name', 'Select your major and minor (check all that apply)':'Majors/Minors', 'What social causes matter to  you? Employers and students identify causes that matter to them.(Choose up to 3).  Check out our Get Involved page on Intern Pursuit for more information: https://www.internpursuit.tech/get-involved':'Social Causes'})
     for i in range(len(employers.index)):
 
@@ -20,8 +20,8 @@ def match(students, employers):
         curr = employers.iloc[[i]]
 
         # perform filtering on all students based on criteria of i-th employer
-        # filtered = round1_filter(students, curr)
-        filtered = students
+        filtered = round1_filter(students, curr)
+        # filtered = students
         # create dataframe with filtered students and i-th employer
         appended = filtered.append(curr)
 
@@ -51,7 +51,7 @@ def match(students, employers):
     return
 
 if __name__ == "__main__":
-    student_file = input("Enter hte name of the student csv file (with path): ")
-    employer_file = input("Enter the name of the employer csv file (with path): ")
+    # student_file = input("Enter hte name of the student csv file (with path): ")
+    # employer_file = input("Enter the name of the employer csv file (with path): ")
     
-    match(student_file, employer_file)
+    match('students.csv', 'employers.csv')
