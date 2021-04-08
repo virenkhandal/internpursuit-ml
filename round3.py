@@ -15,9 +15,13 @@ def match_socials(dataframe, curr):
     employer_social = set(curr['Social Causes'].values[0].split(';'))
     df = pd.DataFrame(columns=["Name", "Final Score"])
     for index, row in dataframe.iterrows():
-        social = row[2].values[0]
-        causes = social.split(';')
-        overlap = len(list(employer_social.intersection(causes)))/3
-        updated_score = (row[1] * 0.75) + (overlap * 0.25)
-        df.loc[len(df)] = [row[0], updated_score]
+        if len(row[2].values) > 0:
+            social = row[2].values[0]
+            if isinstance(social, str):
+                causes = social.split(';')
+                overlap = len(list(employer_social.intersection(causes)))/3
+            else:
+                overlap = 0
+            updated_score = (row[1] * 0.75) + (overlap * 0.25)
+            df.loc[len(df)] = [row[0], updated_score]
     return df

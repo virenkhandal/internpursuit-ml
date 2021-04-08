@@ -1,4 +1,5 @@
 import pandas as pd
+from termcolor import colored
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -21,6 +22,8 @@ def match(students, employers):
 
         # perform filtering on all students based on criteria of i-th employer
         filtered = round1_filter(students, curr)
+        text = "Students remaining after first round: " + str(len(filtered))
+        print(colored(text, "magenta"))
         # filtered = students
         # create dataframe with filtered students and i-th employer
         appended = filtered.append(curr)
@@ -37,6 +40,9 @@ def match(students, employers):
         # get list of top 10-12 candidates as a list of tuples (x, y) where x is the candidate's email address and y is their similarity score
         s_optimal_matchings = match_skills(s_clustered)
         db_optimal_matchings = match_skills(db_clustered)
+        text = "Students remaining after second round: " + str(len(s_optimal_matchings))
+        print(colored(text, "magenta"))
+
         # cleanup all dataframes and get new dataframe which includes candidate's email, similarity score, and social causes columns
         s_cleaned_up = cleanup(filtered, s_clustered, s_optimal_matchings)
         db_cleaned_up = cleanup(filtered, db_clustered, db_optimal_matchings)
@@ -44,7 +50,7 @@ def match(students, employers):
         # return list of top 3-5 candidates based on social clustering
         s_final = match_socials(s_cleaned_up, curr)
         db_final = match_socials(db_cleaned_up, curr)
-
+        
         # pretty print top candidates for current employer
         output = pretty_print(s_final, curr)
         # pretty_print(db_final)

@@ -79,9 +79,16 @@ def pretty_print(dataframe, curr):
     names = dataframe['Name'].values.tolist()
     scores = dataframe['Final Score'].values.tolist()
 
-    top_students = sorted(zip(scores, names), reverse=True)[:10]
+    top_students = sorted(zip(scores, names), reverse=True)
+    size = 0
+    for i in range(len(top_students)):
+        if top_students[i][0] > 0.5:
+            size += 1
+    text = "Students remaining after second round: "+ str(size)
+    print(colored(text, "magenta"))
     print(colored(("The top 3 students for " + curr['Name'].values[0] + " after filtering, skills matching, and social cause matching are:"), "blue"))
-    for i in range(3):
-        print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
+    for i in range(len(top_students)):
+        if i < 3:
+            print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
     print()
     return top_students

@@ -70,12 +70,13 @@ def match_skills(clustered):
         cosine = cosine_similarity(employer_values.reshape(1, -1), student_values.reshape(1, -1))[0][0]
         name = student_arr[0]
         # print(name)
-        scores.append(cosine)
-        names.append(name)
+        if cosine > 0.5:
+            scores.append(cosine)
+            names.append(name)
     for i in range(len(names)):
         if isinstance(names[i], float):
             names[i] = 'Error'
     # print(names)
     # print(scores)
-    top_students = sorted(zip(scores, names), reverse=True)[:10]
+    top_students = sorted(zip(scores, names), reverse=True)
     return top_students
