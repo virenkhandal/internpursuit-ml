@@ -2,13 +2,13 @@ from os import major
 import pandas as pd
 
 def round1_filter(students, employer):
-    employer_majors = employer['Majors/Minors'].values[0].split(';')
     filtered = students
     drop = set()
 
     """
     Majors/Minors filter
     """
+    employer_majors = employer['Majors/Minors'].values[0].split(';')
     for index in range(len(filtered.index)):
         row = filtered.iloc[[index]]
         if isinstance(row['Majors/Minors'].values[0], str):
@@ -59,16 +59,38 @@ def round1_filter(students, employer):
                 drop.add(index)
     
     """
-    Work location filter
+    Work location filter - nothing right now
     """
 
     """
     School credit filter
     """
+    employer_cred = employer['Credit or Non-Credit '].values[0].split(';')
+    for index in range(len(filtered.index)):
+        row = filtered.iloc[[index]]
+        s = 'Credit or Noncredit Internship (Requires a full semester commitment)'
+        if str(row[s].values[0]) == 'nan':
+            row[s].values[0] = 'Non-Credit - Think of this like a volunteer role'
+        student_cred = row['Credit or Noncredit Internship (Requires a full semester commitment)'].values[0].split(';')
+        if student_cred[0] == 'Non-Credit - Think of this like a volunteer role':
+            break
+        elif student_cred[0] not in employer_cred:
+            drop.add(index)
+            
 
     """
     Academic calendar filter
     """
+    employer_cal = employer['Which semester are you seeking interns working with you'].values[0].split(';')
+    employer_cal = [x.lower() for x in employer_cal]
+    for index in range(len(filtered.index)):
+        row = filtered.iloc[[index]]
+        student_cal = row['Which semester are you seeking an internship?'].values[0].split(';')
+        if (len(student_cal) == 1 and student_cal[0] == 'flexible') or 'On demand' in employer_cal:
+            break
+        if set(student_cal).isdisjoint(set(employer_cal)):
+            drop.add(index)
+
     filtered = filtered.drop(list(drop))
     filtered.reset_index(inplace=True)
     return filtered

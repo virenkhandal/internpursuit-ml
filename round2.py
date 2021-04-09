@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import scipy
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.metrics.pairwise import cosine_distances, cosine_similarity
@@ -68,6 +69,7 @@ def match_skills(clustered):
         student_values = np.array(student_arr[2:])
         # print('student_values: ', student_values)
         cosine = cosine_similarity(employer_values.reshape(1, -1), student_values.reshape(1, -1))[0][0]
+        euclidean = scipy.spatial.distance.euclidean(employer_values, student_values)
         name = student_arr[0]
         # print(name)
         if cosine > 0.5:
