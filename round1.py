@@ -48,7 +48,7 @@ def round1_filter(students, employer):
             drop.add(index)
 
     """
-    Flexible Schedule filter
+    Flexible schedule filter
     """
     employer_flex = employer['Flex Schedule (check all that apply)'].values[0].split(';')
     for index in range(len(filtered.index)):
@@ -58,7 +58,17 @@ def round1_filter(students, employer):
             if "Flex Hours - adjust to student school & work schedule" not in employer_flex:
                 drop.add(index)
     
+    """
+    Work location filter
+    """
 
+    """
+    School credit filter
+    """
+
+    """
+    Academic calendar filter
+    """
     filtered = filtered.drop(list(drop))
     filtered.reset_index(inplace=True)
     return filtered
