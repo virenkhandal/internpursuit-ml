@@ -75,10 +75,11 @@ def find_num_clusters(scores):
             scores = i
             return i
 
-def pretty_print(dataframe, curr):
+def pretty_print(dataframe, curr, count):
     names = dataframe['Name'].values.tolist()
     scores = dataframe['Final Score'].values.tolist()
-
+    if count == 0:
+        count = len(names)
     top_students = sorted(zip(scores, names), reverse=True)
     size = 0
     for i in range(len(top_students)):
@@ -88,7 +89,7 @@ def pretty_print(dataframe, curr):
     print(colored(text, "magenta"))
     print(colored(("The top 3 students for " + curr['Name'].values[0] + " after filtering, skills matching, and social cause matching are:"), "blue"))
     for i in range(len(top_students)):
-        if i < 3:
+        if i < count:
             print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
     print()
     return top_students

@@ -9,15 +9,14 @@ def round1_filter(students, employer):
     Majors/Minors filter
     """
     employer_majors = employer['Majors/Minors'].values[0].split(';')
+    # print(employer["Name"].values.tolist()[0], ": ", employer['Majors/Minors'].values[0])
     for index in range(len(filtered.index)):
         row = filtered.iloc[[index]]
         if isinstance(row['Majors/Minors'].values[0], str):
             student_majors = row['Majors/Minors'].values[0].split(';')
-            bool = False
-            for i in student_majors:
-                if i in employer_majors:
-                    bool = True
-                    break
+            if not set(student_majors).isdisjoint(set(employer_majors)):
+                # print(row['Name'].values.tolist()[0], ": ", row['Majors/Minors'].values[0])
+                pass
             if set(student_majors).isdisjoint(set(employer_majors)):
                 drop.add(index)
 
