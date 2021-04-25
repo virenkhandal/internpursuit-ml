@@ -8,20 +8,24 @@ from sklearn.metrics.pairwise import cosine_distances, cosine_similarity
 def round2_cluster(appended, num_clusters):
     # print(num_clusters)
     df = appended
+    # print(appended.keys())
     df['Problem Solving'] = df['Rank each skill on the list first to last. [Problem Solving]'].astype(str).str[0]
     df['Creativity'] = df['Rank each skill on the list first to last. [Creativity]'].astype(str).str[0]
     df['Research'] = df['Rank each skill on the list first to last. [Research]'].astype(str).str[0]
     df['Time Management'] = df['Rank each skill on the list first to last. [Time Management]'].astype(str).str[0]
     df['Communication'] = df['Rank each skill on the list first to last. [Communication]'].astype(str).str[0]
     df['Critical Thinking'] = df['Rank each skill on the list first to last. [Critical Thinking ]'].astype(str).str[0]
-
-    newdf = df[['Problem Solving', 'Creativity', 'Research', 'Time Management', 'Communication', 'Critical Thinking']]
+    
+    newdf = df[['Problem Solving', 'Creativity', 'Research', 'Time Management', 'Communication', 'Critical Thinking', 'Scores']]
     newdf['Problem Solving'].replace("n", value="0", inplace=True)
     newdf['Creativity'].replace("n", value="0", inplace=True) 
     newdf['Research'].replace("n", value="0", inplace=True) 
     newdf['Time Management'].replace("n", value="0", inplace=True) 
     newdf['Communication'].replace("n", value="0", inplace=True) 
     newdf['Critical Thinking'].replace("n", value="0", inplace=True) 
+    # print(newdf)
+    newdf = newdf.fillna(0)
+
     # print(newdf)
 
 
@@ -47,10 +51,9 @@ def round2_cluster(appended, num_clusters):
     # df = df['Name']
     # Assigning the clusters to each profile
     df['Cluster #'] = cluster_assignments
-    # print(df.keys())
     return df
 
-def match_skills(clustered):
+def match_skills(clustered, filtered):
     employer = clustered.iloc[[-1]]
     filtered_students = clustered[0:-1]
     best_student = ""
@@ -64,9 +67,9 @@ def match_skills(clustered):
         # print('employer: ', arr)
         student_arr = student.values.tolist()
         # print('student: ', student_arr)
-        employer_values = np.array(arr[0][2:])
+        employer_values = np.array(arr[0][2:-1])
         # print('employer values: ', employer_values)
-        student_values = np.array(student_arr[2:])
+        student_values = np.array(student_arr[2:-1])
         # print('student_values: ', student_values)
         cosine = cosine_similarity(employer_values.reshape(1, -1), student_values.reshape(1, -1))[0][0]
         euclidean = scipy.spatial.distance.euclidean(employer_values, student_values)
@@ -80,5 +83,16 @@ def match_skills(clustered):
             names[i] = 'Error'
     # print(names)
     # print(scores)
-    top_students = sorted(zip(scores, names), reverse=True)
-    return top_students
+    matchings = sorted(zip(scores, names), reverse=True)
+    df = pd.DataFrame(columns=["Name", "Skill Scores", "Filter Scores", "Social Causes"])
+    for i in range(len(matchings)):
+        person = matchings[i]
+        score, name = person[0], person[1]
+        # print(filtered.keys())
+        round1_scores = filtered[filtered['Name'] == name]['Scores'].values[0]
+        # print(type(filtered[filtered['Name'] == name]['Scores'].values[0]))
+        social_causes = filtered[filtered['Name'] == name]['What social causes matter to  you? Employers and students identify causes that matter to them.(Choose up to 3).  Check out our Get Involved page on Intern Pursuit for more information: https://www.internpursuit.tech/get-involved']
+        df.loc[len(df)] = [name, score, round1_scores, social_causes]
+
+    # print(df)
+    return df
