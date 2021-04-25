@@ -28,7 +28,7 @@ def round1_match(students, employer):
         # if row['Name'].values[0] == 'dorsi.jesse@gmail.com':
         #     print(type(majors))
         if not isinstance(majors, str):
-            print(row["Name"].values[0])
+            # print(row["Name"].values[0])
             drop.add(index)
         else:
         # print(majors)
@@ -41,6 +41,7 @@ def round1_match(students, employer):
                     inside = True
                     break
             if not inside:
+                # drop.add(index)
                 student_majors = 0
         # student_set = set(student_majors)
         # if not student_set.isdisjoint(set(employer_majors)):
@@ -136,7 +137,8 @@ def round1_match(students, employer):
         details = np.array(details)
         employer_details = np.array(employer_details)
         # print("employer details: ", employer_details)
-        # print("student details: ", details)
+        # if row['Name'].values[0] == 'sngraciak7@gmail.com':
+        #     print("student details: ", details)
         score = np.dot(employer_details, details)
         # print(score)
         scores.append(score)
