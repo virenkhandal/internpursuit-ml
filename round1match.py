@@ -41,7 +41,8 @@ def round1_match(students, employer):
                     inside = True
                     break
             if not inside:
-                # drop.add(index)
+                drop.add(index)
+                break
                 student_majors = 0
         # student_set = set(student_majors)
         # if not student_set.isdisjoint(set(employer_majors)):
@@ -142,6 +143,8 @@ def round1_match(students, employer):
         score = np.dot(employer_details, details)
         # print(score)
         scores.append(score)
+        if score == 0:
+            drop.add(index)
     # print(scores)
     m = pd.Series(scores)
     filtered.insert(len(filtered.columns), "Scores", m)
