@@ -24,7 +24,7 @@ def match_socials(dataframe, curr):
             else:
                 overlap = 0
             row[2] = row[2]/6
-            updated_score = (row[1] * 0.5) + (row[2] * 0.3) + (overlap * 0.2)
-            # updated_score = (row[1] * 0.75) + (overlap * 0.25)
+            # updated_score = (row[1] * 0.5) + (row[2] * 0.3) + (overlap * 0.2)
+            updated_score = (row[1] * 0.75) + (overlap * 0.25)
             df.loc[len(df)] = [row[0], updated_score]
     return df

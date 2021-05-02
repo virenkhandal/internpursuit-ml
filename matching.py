@@ -27,7 +27,7 @@ def match(students, employers, company_name, count, api=False):
                 # for i in filtered['Username'].values.tolist():
                 #     print(i)
                 # print(filtered['Username'].values.tolist())
-                text = "Students remaining after first round: " + str(len(filtered))
+                text = "First round complete"
                 print(colored(text, "magenta"))
                 # filtered = students
                 # create dataframe with filtered students and i-th employer
@@ -35,19 +35,19 @@ def match(students, employers, company_name, count, api=False):
                 # find optimal number of clusters for appended dataframe
                 s_score, db_score = optimize_skills(appended)
                 s_clusters = find_num_clusters(plot_evaluation(s_score))
-                # db_clusters = find_num_clusters(plot_evaluation(db_score))
+                db_clusters = find_num_clusters(plot_evaluation(db_score))
 
                 # perform clustering on appended using both of the optimized cluster scores, use appended dataframe because we need apply a bonus weight if student and employer's clusters match
                 # print("num clusters: ", s_score)
                 s_clustered = round2_cluster(appended, 2)
-                # db_clustered = round2_cluster(appended, db_clusters)
+                db_clustered = round2_cluster(appended, db_clusters)
 
                 # get list of top 10-12 candidates as a list of tuples (x, y) where x is the candidate's email address and y is their similarity score
                 s_optimal_matchings = match_skills(s_clustered, filtered)
-                # db_optimal_matchings = match_skills(db_clustered, filtered)
+                db_optimal_matchings = match_skills(db_clustered, filtered)
                 # for i in s_optimal_matchings:
                 #     print(i)
-                text = "Students remaining after second round: " + str(len(s_optimal_matchings))
+                text = "Second round complete"
                 print(colored(text, "magenta"))
 
                 # cleanup all dataframes and get new dataframe which includes candidate's email, similarity score, and social causes columns
@@ -56,11 +56,18 @@ def match(students, employers, company_name, count, api=False):
 
                 # return list of top 3-5 candidates based on social clustering
                 s_final = match_socials(s_optimal_matchings, curr)
-                # db_final = match_socials(db_optimal_matchings, curr)
+                db_final = match_socials(db_optimal_matchings, curr)
                 # for i in s_final['Name'].values.tolist():
                 #     print(i)
                 # pretty print top candidates for current employer
+                # print("silhoutte score matching: ")
                 output = pretty_print(s_final, curr, count)
+
+                # print("================================================================")
+
+                # print("db score matching: ")
+                # output = pretty_print(db_final, curr, count)
+
                 # pretty_print(db_final)
         else:
             filtered = round1_filter(students, curr)
