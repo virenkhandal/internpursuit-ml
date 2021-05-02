@@ -43,7 +43,7 @@ def round1_match(students, employer):
                 student_majors = majors
             else:
                 student_majors = majors.append(minors)
-            
+            print("student_majors: ", student_majors)
             inside = False
             for i in student_majors:
                 print("i: ", i, " , ", i in employer_majors)
