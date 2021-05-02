@@ -23,11 +23,11 @@ def round2_cluster(appended, num_clusters):
     newdf['Time Management'].replace("n", value="0", inplace=True) 
     newdf['Communication'].replace("n", value="0", inplace=True) 
     newdf['Critical Thinking'].replace("n", value="0", inplace=True) 
-    # print(newdf)
+
     newdf = newdf.fillna(0)
-
+    # newdf.drop(df.tail(1).index,inplace=True)
+    newdf = newdf.drop_duplicates()
     # print(newdf)
-
 
     scaler = MinMaxScaler()
     # print(df)
@@ -88,8 +88,7 @@ def match_skills(clustered, filtered):
     for i in range(len(matchings)):
         person = matchings[i]
         score, name = person[0], person[1]
-        # print(filtered.keys())
-        round1_scores = filtered[filtered['Name'] == name]['Scores'].values[0]
+        round1_scores = filtered[filtered['Name'] == name]['Scores'].values
         # print(type(filtered[filtered['Name'] == name]['Scores'].values[0]))
         social_causes = filtered[filtered['Name'] == name]['What social causes matter to  you? Employers and students identify causes that matter to them.(Choose up to 3).  Check out our Get Involved page on Intern Pursuit for more information: https://www.internpursuit.tech/get-involved']
         df.loc[len(df)] = [name, score, round1_scores, social_causes]

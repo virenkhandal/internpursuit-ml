@@ -8,13 +8,17 @@ def round1_match(students, employer):
     filtered = students
     drop = set()
     employer_majors = employer['Majors/Minors'].values[0].split(', ')
-    employer_citizenship = employer['Citizenship'].values[0].split(',')
-    employer_hours = employer['Full Time or Part Time (Choose weekly hours)'].values[0].split(',')
-    employer_flex = employer['Flex Schedule (check all that apply)'].values[0].split(',')
-    employer_cred = employer['Credit or Non-Credit '].values[0].split(',')
-    employer_cal = employer['Which semester are you seeking interns working with you'].values[0].split(',')
+    employer_citizenship = employer['Citizenship'].values[0].split(', ')
+    employer_hours = employer['Full Time or Part Time (Choose weekly hours)'].values[0].split(', ')
+    employer_flex = employer['Flex Schedule (check all that apply)'].values[0].split(', ')
+    employer_paid = employer['What type of internships are you offering unpaid or paid?'].values[0].split(', ')
+    employer_cred = employer['Credit or Non-Credit '].values[0].split(', ')
+    employer_cal = employer['Which semester are you seeking interns working with you'].values[0].split(', ')
     employer_cal = [x.lower() for x in employer_cal]
-    employer_details = [1, 1, 1, 1, 1, 1]
+
+    # details = [student_majors, student_citizenship, paid, student_hours, student_flex, cred_score, student_cal]
+
+    employer_details = [1, 1, 1, 1, 1, 1, 1]
     scores = []
     for index in range(len(filtered.index)):
         # print(index)
@@ -27,42 +31,30 @@ def round1_match(students, employer):
         # print(row.keys())
         majors = row['Your Major '].values[0]
         minors = row['Your Minor (if applicable)'].values[0]
-        print(row['Name'].values[0], " : ", majors)
+        # print(row['Name'].values[0], " : ", majors)
         # if row['Name'].values[0] == 'dorsi.jesse@gmail.com':
             # print(type(majors))
         if not isinstance(majors, str):
             # print(row["Name"].values[0])
-            print(colored("nan", "red"))
+            # print(colored("nan", "red"))
             drop.add(index)
         else:
             # print(employer_majors)
         # print(minors)
-            majors = majors.split(", ")
-            minors = minors.split(", ")
-            if len(minors) == 0:
-                student_majors = majors
-            else:
-                student_majors = majors.append(minors)
-            print("student_majors: ", student_majors)
+            student_majors = majors.split(", ")
             inside = False
             for i in student_majors:
-                print("i: ", i, " , ", i in employer_majors)
+                # print("i: ", i, " , ", i in employer_majors)
                 if i in employer_majors:
-                    student_majors = 1
+                    student_majors = 5
                     inside = True
-                    print(colored("match", "green"))
+                    # print(colored("match", "green"))
                     break
             if not inside:
                 drop.add(index)
-                print(colored("no match", "red"))
+                # print(colored("no match", "red"))
                 student_majors = 0
-        # student_set = set(student_majors)
-        # if not student_set.isdisjoint(set(employer_majors)):
-        #     major_score = 1
-        # else:
-        #     major_score = 0
-            # print(student_majors)
-            # print(employer_majors)
+
         """
         Citizenship matching
         """
@@ -72,9 +64,26 @@ def round1_match(students, employer):
         if student_citizenship[0:3] == "Int":
             student_citizenship = "International Student"
         if student_citizenship in employer_citizenship:
-            student_citizenship = 1
+            student_citizenship = 4
         else:
             student_citizenship = 0
+
+        """
+        Unpaid vs Paid matching
+        """
+        s = "Unpaid or Paid intern options. Select which options you are open to interning.  Approximately 70% of the internships are unpaid. Please be open to options."
+        student_paid = row[s].values[0].split(', ')
+        # print(student_paid)
+
+        if student_paid[0] == "Both":
+            student_paid = ["Unpaid", "Paid"]
+        for i in student_paid:
+            if i in employer_paid:
+                paid = 4
+                inside = True
+
+        if not inside:
+            paid = 0
 
         """
         Working hours matching
@@ -89,7 +98,7 @@ def round1_match(students, employer):
         # print(student_hours)
 
         if student_hours in employer_hours:
-            student_hours = 1
+            student_hours = 4
         else:
             student_hours = 0
 
@@ -102,7 +111,7 @@ def round1_match(students, employer):
         inside = False
         for i in student_flex:
             if i in employer_flex:
-                student_flex = 1
+                student_flex = 3
                 inside = True
                 break
         if not inside:
@@ -119,7 +128,7 @@ def round1_match(students, employer):
         # print(employer_cred)
         # print(student_cred)
         if student_cred[0] in employer_cred:
-            cred_score = 1
+            cred_score = 2
 
 
         """
@@ -146,7 +155,7 @@ def round1_match(students, employer):
         #     student_cal = 0
 
 
-        details = [student_majors, student_citizenship, student_hours, student_flex, cred_score, student_cal]
+        details = [student_majors, student_citizenship, paid, student_hours, student_flex, cred_score, student_cal]
         details = np.array(details)
         employer_details = np.array(employer_details)
         # print("employer details: ", employer_details)
@@ -165,4 +174,5 @@ def round1_match(students, employer):
     # filtered.reset_index(inplace=True)
     filtered = filtered.drop(list(drop))
     filtered.reset_index(inplace=True)
+    # print(filtered)
     return filtered

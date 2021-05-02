@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.utils import validation
 from termcolor import colored
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 from sklearn.preprocessing import MinMaxScaler
@@ -88,8 +89,16 @@ def pretty_print(dataframe, curr, count):
     text = "Students remaining after second round: "+ str(size)
     print(colored(text, "magenta"))
     print(colored(("The top 3 students for " + curr['Name'].values[0] + " after filtering, skills matching, and social cause matching are:"), "blue"))
+    validation_list = ["claudiacaballero@knights.ucf.edu", "aung.thurein@knights.ucf.edu", "oosterha@oregonstate.edu", "masonje332@gmail.com", "dgold@knights.ucf.edu", "hannahisabelmason@gmail.com", "mgarfinkle1@knights.ucf.edu", "HALEYBLATT@GMAIL.COM", "marielle.pecson0611@gmail.com", "blaze.wallick@gmail.com"]
     for i in range(len(top_students)):
         if i < count:
-            print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
+            email = str(top_students[i][1])
+            if email in validation_list:
+                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "blue", "on_white", ['blink'])) 
+                validation_list.remove(email)
+            else:
+                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
     print()
+    for i in validation_list:
+        print(colored((i + " was not listed in top candidates for Affiliate Manager"), "red"))
     return top_students

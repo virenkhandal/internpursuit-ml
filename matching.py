@@ -35,15 +35,16 @@ def match(students, employers, company_name, count, api=False):
                 # find optimal number of clusters for appended dataframe
                 s_score, db_score = optimize_skills(appended)
                 s_clusters = find_num_clusters(plot_evaluation(s_score))
-                db_clusters = find_num_clusters(plot_evaluation(db_score))
+                # db_clusters = find_num_clusters(plot_evaluation(db_score))
 
                 # perform clustering on appended using both of the optimized cluster scores, use appended dataframe because we need apply a bonus weight if student and employer's clusters match
-                s_clustered = round2_cluster(appended, s_clusters)
-                db_clustered = round2_cluster(appended, db_clusters)
+                # print("num clusters: ", s_score)
+                s_clustered = round2_cluster(appended, 2)
+                # db_clustered = round2_cluster(appended, db_clusters)
 
                 # get list of top 10-12 candidates as a list of tuples (x, y) where x is the candidate's email address and y is their similarity score
                 s_optimal_matchings = match_skills(s_clustered, filtered)
-                db_optimal_matchings = match_skills(db_clustered, filtered)
+                # db_optimal_matchings = match_skills(db_clustered, filtered)
                 # for i in s_optimal_matchings:
                 #     print(i)
                 text = "Students remaining after second round: " + str(len(s_optimal_matchings))
@@ -55,11 +56,11 @@ def match(students, employers, company_name, count, api=False):
 
                 # return list of top 3-5 candidates based on social clustering
                 s_final = match_socials(s_optimal_matchings, curr)
-                db_final = match_socials(db_optimal_matchings, curr)
+                # db_final = match_socials(db_optimal_matchings, curr)
                 # for i in s_final['Name'].values.tolist():
                 #     print(i)
                 # pretty print top candidates for current employer
-                # output = pretty_print(s_final, curr, count)
+                output = pretty_print(s_final, curr, count)
                 # pretty_print(db_final)
         else:
             filtered = round1_filter(students, curr)
@@ -99,5 +100,6 @@ def match(students, employers, company_name, count, api=False):
 if __name__ == "__main__":
     # student_file = input("Enter hte name of the student csv file (with path): ")
     # employer_file = input("Enter the name of the employer csv file (with path): ")
-    employer_name = input("Enter name of the company: ")
+    # employer_name = input("Enter name of the company: ")
+    employer_name = "Affiliate Manager"
     match('updated_students.csv', 'updated_employers.csv', employer_name, 0, True)
