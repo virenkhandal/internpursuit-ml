@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_distances, cosine_similarity
+from termcolor import colored
+
 
 def round1_match(students, employer):
     filtered = students
     drop = set()
-    employer_majors = employer['Majors/Minors'].values[0].split(',')
+    employer_majors = employer['Majors/Minors'].values[0].split(', ')
     employer_citizenship = employer['Citizenship'].values[0].split(',')
     employer_hours = employer['Full Time or Part Time (Choose weekly hours)'].values[0].split(',')
     employer_flex = employer['Flex Schedule (check all that apply)'].values[0].split(',')
@@ -15,6 +17,7 @@ def round1_match(students, employer):
     employer_details = [1, 1, 1, 1, 1, 1]
     scores = []
     for index in range(len(filtered.index)):
+        # print(index)
         row = filtered.iloc[[index]]
 
         """
@@ -24,25 +27,34 @@ def round1_match(students, employer):
         # print(row.keys())
         majors = row['Your Major '].values[0]
         minors = row['Your Minor (if applicable)'].values[0]
-        # print(row['Name'], " : ", majors)
+        print(row['Name'].values[0], " : ", majors)
         # if row['Name'].values[0] == 'dorsi.jesse@gmail.com':
-        #     print(type(majors))
+            # print(type(majors))
         if not isinstance(majors, str):
             # print(row["Name"].values[0])
+            print(colored("nan", "red"))
             drop.add(index)
         else:
-        # print(majors)
+            # print(employer_majors)
         # print(minors)
-            student_majors = [majors, minors]
+            majors = majors.split(", ")
+            minors = minors.split(", ")
+            if len(minors) == 0:
+                student_majors = majors
+            else:
+                student_majors = majors.append(minors)
+            
             inside = False
             for i in student_majors:
+                print("i: ", i, " , ", i in employer_majors)
                 if i in employer_majors:
                     student_majors = 1
                     inside = True
+                    print(colored("match", "green"))
                     break
             if not inside:
                 drop.add(index)
-                break
+                print(colored("no match", "red"))
                 student_majors = 0
         # student_set = set(student_majors)
         # if not student_set.isdisjoint(set(employer_majors)):

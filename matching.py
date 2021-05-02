@@ -59,7 +59,7 @@ def match(students, employers, company_name, count, api=False):
                 # for i in s_final['Name'].values.tolist():
                 #     print(i)
                 # pretty print top candidates for current employer
-                output = pretty_print(s_final, curr, count)
+                # output = pretty_print(s_final, curr, count)
                 # pretty_print(db_final)
         else:
             filtered = round1_filter(students, curr)
