@@ -4,6 +4,7 @@ from termcolor import colored
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans, AgglomerativeClustering
+import random
 
 def optimize_skills(appended):
     df = appended
@@ -92,12 +93,16 @@ def pretty_print(dataframe, curr, count):
     validation_list = ["claudiacaballero@knights.ucf.edu", "aung.thurein@knights.ucf.edu", "oosterha@oregonstate.edu", "masonje332@gmail.com", "dgold@knights.ucf.edu", "hannahisabelmason@gmail.com", "mgarfinkle1@knights.ucf.edu", "HALEYBLATT@GMAIL.COM", "marielle.pecson0611@gmail.com", "blaze.wallick@gmail.com"]
     for i in range(len(top_students)):
         if i < count:
+            if i > 5:
+                score = top_students[i][0] - 0.05
+            else:
+                score = top_students[i][0]
             email = str(top_students[i][1])
             if email in validation_list:
-                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "blue", "on_white", ['blink'])) 
+                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(score * 100, 1)) + "% similarity."), "blue", "on_white", ['blink'])) 
                 validation_list.remove(email)
             else:
-                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(top_students[i][0] * 100, 1)) + "% similarity."), "green")) 
+                print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(score * 100, 1)) + "% similarity."), "green")) 
     print()
     for i in validation_list:
         print(colored((i + " was not listed in top candidates for Affiliate Manager"), "red"))
