@@ -174,5 +174,5 @@ def round1_match(students, employer):
     # filtered.reset_index(inplace=True)
     filtered = filtered.drop(list(drop))
     filtered.reset_index(inplace=True)
-    # print(filtered)
+    print(filtered)
     return filtered

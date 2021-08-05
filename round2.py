@@ -26,8 +26,8 @@ def round2_cluster(appended, num_clusters):
 
     newdf = newdf.fillna(0)
     # newdf.drop(df.tail(1).index,inplace=True)
-    newdf = newdf.drop_duplicates()
-    # print(newdf)
+    # print(len(newdf))
+    # newdf = newdf.drop_duplicates()
 
     scaler = MinMaxScaler()
     # print(df)
@@ -50,6 +50,8 @@ def round2_cluster(appended, num_clusters):
     df = df[['Name']].join(pd.DataFrame(scaler.inverse_transform(newdf), columns=newdf.columns[:]))
     # df = df['Name']
     # Assigning the clusters to each profile
+    # print(len(cluster_assignments), "\n\n")
+    # print(df)
     df['Cluster #'] = cluster_assignments
     return df
 

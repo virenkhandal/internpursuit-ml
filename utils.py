@@ -105,5 +105,5 @@ def pretty_print(dataframe, curr, count):
                 print(colored((str(i+1)+". " + str(top_students[i][1]) + " with a " + str(round(score * 100, 1)) + "% similarity."), "green")) 
     print()
     for i in validation_list:
-        print(colored((i + " was not listed in top candidates for Affiliate Manager"), "red"))
+        print(colored((i + " was not listed in top candidates."), "red"))
     return top_students

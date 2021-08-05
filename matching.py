@@ -107,6 +107,6 @@ def match(students, employers, company_name, count, api=False):
 if __name__ == "__main__":
     # student_file = input("Enter hte name of the student csv file (with path): ")
     # employer_file = input("Enter the name of the employer csv file (with path): ")
-    employer_name = input("Enter name of the company: ")
-    # employer_name = "Affiliate Manager"
+    # employer_name = input("Enter name of the company: ")
+    employer_name = "Cat 5 studios"
     match('updated_students.csv', 'updated_employers.csv', employer_name, 0, True)
