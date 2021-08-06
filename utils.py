@@ -28,7 +28,7 @@ def optimize_skills(appended):
     new_df = pd.DataFrame(scaler.fit_transform(newdf), columns=newdf.columns[:], index=newdf.index)
 
     # Setting the amount of clusters to test out
-    cluster_cnt = [i for i in range(2, 12, 1)]
+    cluster_cnt = [i for i in range(2, 6, 1)]
 
     # Establishing empty lists to store the scores for the evaluation metrics
     s_scores = []
